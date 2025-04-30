@@ -9,11 +9,16 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Size;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
-
+@AllArgsConstructor
+@NoArgsConstructor
+@Getter
 public class PedidoDTO {
 
     private Long id;
@@ -26,7 +31,8 @@ public class PedidoDTO {
     private LocalDate data;
     @Enumerated(EnumType.STRING)
     private Status status;
-    private List<@Valid ItemDoPedidoDTO> items = new ArrayList<>();
+    @NotEmpty(message = "Pedido deve ter pelo menos um item de pedido")
+    private List<@Valid ItemDoPedidoDTO> itens = new ArrayList<>();
 
     public  PedidoDTO(Pedido entity){
         id = entity.getId();
@@ -35,9 +41,9 @@ public class PedidoDTO {
         data = entity.getData();
         status = entity.getStatus();
 
-        for (ItemDoPedido item : entity.getItems()){
+        for (ItemDoPedido item : entity.getItens()){
             ItemDoPedidoDTO itemDTO = new ItemDoPedidoDTO(item);
-            items.add(itemDTO);
+            itens.add(itemDTO);
         }
     }
 
